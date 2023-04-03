@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@Getter
-@NoArgsConstructor
+@Data
 @Embeddable
 public class CommentKey implements Serializable{
 

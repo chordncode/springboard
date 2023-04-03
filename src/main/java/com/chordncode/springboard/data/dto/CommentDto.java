@@ -1,7 +1,6 @@
 package com.chordncode.springboard.data.dto;
 
-
-import java.util.List;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,18 +15,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class BoardDto {
-
+public class CommentDto {
+    
+    private Long commentSn;
     private Long boardSn;
-    private String boardTitle;
-    private String boardContent;
-    private String boardWriter;
-    private Long boardHit;
-    private String boardPw;
 
-    private List<CommentDto> commentList;
-
-    private String createdAt;
-    private String updatedAt;
+    private String commentContent;
+    private String commentWriter;
+    private String commentPw;
+    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }
