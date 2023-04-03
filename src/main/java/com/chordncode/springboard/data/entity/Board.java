@@ -61,7 +61,7 @@ public class Board {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Comment> comments;
 
 }
