@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CommentId implements Serializable{
+public class CommentKey implements Serializable{
     
     private Long commentSn;
     private Long boardSn;

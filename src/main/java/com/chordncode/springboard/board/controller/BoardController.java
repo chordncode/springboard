@@ -58,7 +58,7 @@ public class BoardController {
         } catch(ResponseStatusException e){
             if(e.getStatus() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
             if(e.getStatus() == HttpStatus.UNAUTHORIZED) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다.");
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
