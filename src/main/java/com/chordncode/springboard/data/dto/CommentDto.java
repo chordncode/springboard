@@ -24,7 +24,7 @@ public class CommentDto {
     private String commentWriter;
     private String commentPw;
     
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
 }

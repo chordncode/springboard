@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.chordncode.springboard.data.dto.BoardDto;
+import com.chordncode.springboard.data.dto.CommentDto;
 import com.chordncode.springboard.data.entity.Board;
+import com.chordncode.springboard.data.entity.Comment;
 import com.chordncode.springboard.data.repository.BoardRepository;
+import com.chordncode.springboard.data.repository.CommentRepository;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -119,4 +122,5 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.findById(boardSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."));
         boardRepository.deleteById(boardSn);
     }
+
 }

@@ -2,9 +2,6 @@ package com.chordncode.springboard.board.controller;
 
 import java.util.List;
 
-import javax.xml.bind.ValidationException;
-
-import org.hibernate.PropertyValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,13 +30,13 @@ public class BoardController {
     
     @GetMapping("")
     public ResponseEntity<List<BoardDto>> listBoard(){
-        return ResponseEntity.status(HttpStatus.OK).body(boardService.listBoard());
+        return ResponseEntity.ok(boardService.listBoard());
     }
 
     @GetMapping("/{boardSn}")
     public ResponseEntity<BoardDto> selectBoard(@PathVariable Long boardSn){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoard(boardSn));
+            return ResponseEntity.ok(boardService.selectBoard(boardSn));
         } catch (ResponseStatusException e) {
             return ResponseEntity.notFound().build();
         }
@@ -48,7 +45,7 @@ public class BoardController {
     @PostMapping("")
     public ResponseEntity<?> insertBoard(@RequestBody BoardDto boardDto){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(boardService.insertBoard(boardDto));
+            return ResponseEntity.ok(boardService.insertBoard(boardDto));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
@@ -66,14 +63,14 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardSn}")
-        public ResponseEntity<?> deleteBoard(@PathVariable Long boardSn){
-            try{
-                boardService.deleteBoard(boardSn);
-                return ResponseEntity.status(HttpStatus.OK).build();
-            } catch (ResponseStatusException e){
-                if(e.getStatus() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
-                return ResponseEntity.badRequest().build();
-            }
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardSn){
+        try{
+            boardService.deleteBoard(boardSn);
+            return ResponseEntity.ok().build();
+        } catch (ResponseStatusException e){
+            if(e.getStatus() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
+    }
 
 }
