@@ -5,19 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.ValidationException;
-
-import org.hibernate.PropertyValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.chordncode.springboard.data.dto.BoardDto;
-import com.chordncode.springboard.data.dto.CommentDto;
 import com.chordncode.springboard.data.entity.Board;
-import com.chordncode.springboard.data.entity.Comment;
 import com.chordncode.springboard.data.repository.BoardRepository;
-import com.chordncode.springboard.data.repository.CommentRepository;
 
 @Service
 public class BoardServiceImpl implements BoardService {
