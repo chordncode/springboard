@@ -26,14 +26,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @Entity
 @Table(name = "comment")
-@IdClass(CommentKey.class)
+@IdClass(CommentId.class)
 public class Comment {
 
     @Id
-    private Long commentSn;
+    @Column(name = "board_sn")
+    private Long boardSn;
 
     @Id
-    private Long boardSn;
+    @Column(name = "comment_sn")
+    private Long commentSn;
 
     @Column(nullable = false)
     private String commentContent;
@@ -46,5 +48,9 @@ public class Comment {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "board_sn", insertable = false, updatable = false)
+    private Board board;
 
 }

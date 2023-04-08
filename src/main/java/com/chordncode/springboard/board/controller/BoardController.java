@@ -1,5 +1,10 @@
 package com.chordncode.springboard.board.controller;
 
+import java.util.List;
+
+import javax.xml.bind.ValidationException;
+
+import org.hibernate.PropertyValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,13 +15,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.chordncode.springboard.board.service.BoardService;
 import com.chordncode.springboard.board.service.BoardServiceImpl;
 import com.chordncode.springboard.data.dto.BoardDto;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
     private final BoardService boardService;
@@ -26,29 +32,48 @@ public class BoardController {
     }
     
     @GetMapping("")
-    public ResponseEntity<Iterable<BoardDto>> listBoard(){
+    public ResponseEntity<List<BoardDto>> listBoard(){
         return ResponseEntity.status(HttpStatus.OK).body(boardService.listBoard());
     }
 
     @GetMapping("/{boardSn}")
     public ResponseEntity<BoardDto> selectBoard(@PathVariable Long boardSn){
-        return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoard(boardSn));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.selectBoard(boardSn));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("")
-    public ResponseEntity<BoardDto> insertBoard(@RequestBody BoardDto boardDto){
-        return ResponseEntity.status(HttpStatus.OK).body(boardService.insertBoard(boardDto));
+    public ResponseEntity<?> insertBoard(@RequestBody BoardDto boardDto){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(boardService.insertBoard(boardDto));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{boardSn}")
-    public ResponseEntity<BoardDto> updateBoard(@PathVariable Long boardSn, @RequestBody BoardDto boardDto){
-        return ResponseEntity.status(HttpStatus.OK).body(boardService.updateBoard(boardSn, boardDto));
+    public ResponseEntity<?> updateBoard(@PathVariable Long boardSn, @RequestBody BoardDto boardDto){
+        try{
+            return ResponseEntity.ok(boardService.updateBoard(boardSn, boardDto));
+        } catch(ResponseStatusException e){
+            if(e.getStatus() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
+            if(e.getStatus() == HttpStatus.UNAUTHORIZED) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다.");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{boardSn}")
-        public ResponseEntity<Void> deleteBoard(@PathVariable Long boardSn){
-            boardService.deleteBoard(boardSn);
-            return ResponseEntity.status(HttpStatus.OK).build();
+        public ResponseEntity<?> deleteBoard(@PathVariable Long boardSn){
+            try{
+                boardService.deleteBoard(boardSn);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } catch (ResponseStatusException e){
+                if(e.getStatus() == HttpStatus.NOT_FOUND) return ResponseEntity.notFound().build();
+                return ResponseEntity.badRequest().build();
+            }
         }
 
 }

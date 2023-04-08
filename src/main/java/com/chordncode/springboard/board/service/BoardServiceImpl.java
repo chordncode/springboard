@@ -3,10 +3,14 @@ package com.chordncode.springboard.board.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.ValidationException;
+
+import org.hibernate.PropertyValueException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.chordncode.springboard.data.dto.BoardDto;
 import com.chordncode.springboard.data.entity.Board;
@@ -42,11 +46,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDto selectBoard(Long boardSn) {
-        Board board = boardRepository.findById(boardSn).orElse(null);
-
-        if (board == null)
-            return null;
+    public BoardDto selectBoard(Long boardSn) throws ResponseStatusException {
+        Board board = boardRepository.findById(boardSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         BoardDto boardDto = BoardDto.builder()
                 .boardSn(board.getBoardSn())
@@ -61,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDto insertBoard(BoardDto boardDto) {
+    public BoardDto insertBoard(BoardDto boardDto) throws Exception {
         Board board = Board.builder()
                 .boardSn(boardDto.getBoardSn())
                 .boardTitle(boardDto.getBoardTitle())
@@ -88,17 +89,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDto updateBoard(Long boardSn, BoardDto boardDto) {
+    public BoardDto updateBoard(Long boardSn, BoardDto boardDto) throws ResponseStatusException {
 
-        Optional<Board> selectedBoard = boardRepository.findById(boardSn);
-        if(!selectedBoard.isPresent()) return null;
+        Board selectedBoard = boardRepository.findById(boardSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."));
+        if(!selectedBoard.getBoardPw().equals(boardDto.getBoardPw())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다.");
 
-        Board board = selectedBoard.get();
-        board.setBoardTitle(boardDto.getBoardTitle());
-        board.setBoardContent(boardDto.getBoardContent());
-        board.setBoardWriter(boardDto.getBoardWriter());
-        board.setUpdatedAt(LocalDateTime.now());
-        Board updatedBoard = boardRepository.save(board);
+        selectedBoard.setBoardTitle(boardDto.getBoardTitle());
+        selectedBoard.setBoardContent(boardDto.getBoardContent());
+        selectedBoard.setBoardWriter(boardDto.getBoardWriter());
+        selectedBoard.setUpdatedAt(LocalDateTime.now());
+        Board updatedBoard = boardRepository.save(selectedBoard);
 
         BoardDto updatedBoardDto = BoardDto.builder()
                 .boardSn(updatedBoard.getBoardSn())
@@ -116,6 +116,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void deleteBoard(Long boardSn) {
+        boardRepository.findById(boardSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."));
         boardRepository.deleteById(boardSn);
     }
 }
