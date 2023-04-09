@@ -1,5 +1,9 @@
 package com.chordncode.springboard.data.dto;
 
+import java.time.format.DateTimeFormatter;
+
+import com.chordncode.springboard.data.entity.Comment;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +28,19 @@ public class CommentDto {
     
     private String createdAt;
     private String updatedAt;
+
+    public CommentDto(Comment comment){
+        this.commentSn = comment.getCommentSn();
+        this.boardSn = comment.getBoardSn();
+        this.commentContent = comment.getCommentContent();
+        this.commentWriter = comment.getCommentWriter();
+        this.commentPw = comment.getCommentPw();
+        if(comment.getCreatedAt()!= null){
+            this.createdAt = comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        if(comment.getUpdatedAt()!= null){
+            this.updatedAt = comment.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+    }
 
 }

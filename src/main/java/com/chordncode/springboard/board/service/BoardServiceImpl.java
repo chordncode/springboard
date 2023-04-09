@@ -1,7 +1,6 @@
 package com.chordncode.springboard.board.service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,37 +24,14 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardDto> listBoard() {
         return boardRepository.findAll().stream().map(board -> {
-            BoardDto boardDto = BoardDto.builder()
-                  .boardSn(board.getBoardSn())
-                  .boardTitle(board.getBoardTitle())
-                  .boardContent(board.getBoardContent())
-                  .boardWriter(board.getBoardWriter())
-                  .boardHit(board.getBoardHit())
-                  .boardPw(board.getBoardPw())
-                  .createdAt(board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                  .build();
-                  
-            if(board.getUpdatedAt() != null){
-                boardDto.setUpdatedAt(board.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            }
-            return boardDto;
+            return new BoardDto(board);
         }).collect(Collectors.toList());
     }
 
     @Override
     public BoardDto selectBoard(Long boardSn) throws ResponseStatusException {
         Board board = boardRepository.findById(boardSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        BoardDto boardDto = BoardDto.builder()
-                .boardSn(board.getBoardSn())
-                .boardTitle(board.getBoardTitle())
-                .boardContent(board.getBoardContent())
-                .boardWriter(board.getBoardWriter())
-                .boardPw(board.getBoardPw())
-                .createdAt(board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        return boardDto;
+        return new BoardDto(board);
     }
 
     @Override
@@ -70,19 +46,7 @@ public class BoardServiceImpl implements BoardService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        Board savedBoard = boardRepository.save(board);
-
-        BoardDto savedBoardDto = BoardDto.builder()
-                .boardSn(savedBoard.getBoardSn())
-                .boardTitle(savedBoard.getBoardTitle())
-                .boardContent(savedBoard.getBoardContent())
-                .boardWriter(savedBoard.getBoardWriter())
-                .boardHit(savedBoard.getBoardHit())
-                .boardPw(savedBoard.getBoardPw())
-                .createdAt(savedBoard.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        return savedBoardDto;
+        return new BoardDto(boardRepository.save(board));
     }
 
     @Override
@@ -95,20 +59,8 @@ public class BoardServiceImpl implements BoardService {
         selectedBoard.setBoardContent(boardDto.getBoardContent());
         selectedBoard.setBoardWriter(boardDto.getBoardWriter());
         selectedBoard.setUpdatedAt(LocalDateTime.now());
-        Board updatedBoard = boardRepository.save(selectedBoard);
-
-        BoardDto updatedBoardDto = BoardDto.builder()
-                .boardSn(updatedBoard.getBoardSn())
-                .boardTitle(updatedBoard.getBoardTitle())
-                .boardContent(updatedBoard.getBoardContent())
-                .boardWriter(updatedBoard.getBoardWriter())
-                .boardHit(updatedBoard.getBoardHit())
-                .boardPw(updatedBoard.getBoardPw())
-                .createdAt(updatedBoard.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .updatedAt(updatedBoard.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        return updatedBoardDto;
+        
+        return new BoardDto(boardRepository.save(selectedBoard));
     }
 
     @Override
