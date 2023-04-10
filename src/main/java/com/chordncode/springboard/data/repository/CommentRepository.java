@@ -13,7 +13,9 @@ public interface CommentRepository extends JpaRepository<Comment, CommentKey> {
 
     Optional<List<Comment>> findByBoardSn(Long boardSn);
 
-    @Query("SELECT COALESCE(MAX(commentSn), 0) FROM Comment WHERE boardSn = :boardSn")
+    @Query("SELECT COALESCE(MAX(commentSn), 0) " + 
+             "FROM Comment " +
+             "WHERE boardSn = :boardSn")
     Long findMaxCommentSnByBoardSn(Long boardSn);
 
     Optional<Comment> findByBoardSnAndCommentSn(Long boardSn, Long commentSn);

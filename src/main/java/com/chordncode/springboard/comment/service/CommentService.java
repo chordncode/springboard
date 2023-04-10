@@ -27,6 +27,17 @@ public interface CommentService {
     CommentDto insertComment(Long boardSn, CommentDto commentDto) throws Exception;
 
     /**
+     * 댓글에 대댓글 작성
+     * 
+     * @param boardSn 댓글을 작성할 게시글의 번호
+     * @param targetCommentSn 대댓글을 작성할 댓글의 번호
+     * @param commentDto 작성한 댓글의 정보가 담긴 DTO
+     * @return 작성된 댓글의 정보가 담긴 DTO
+     * @throws Exception
+     */
+    CommentDto insertCommentToComment(Long boardSn, Long targetCommentSn, CommentDto commentDto) throws Exception;
+
+    /**
      * 댓글 수정
      * 
      * @param boardSn 수정할 댓글의 게시글의 번호

@@ -36,16 +36,21 @@ public class Comment {
     @Column(name = "comment_sn")
     private Long commentSn;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="comment_content")
     private String commentContent;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="comment_writer")
     private String commentWriter;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="comment_pw")
     private String commentPw;
 
+    @Column(name="target_comment_sn")
+    private Long targetCommentSn;
+
+    @Column(name="created_at")
     private LocalDateTime createdAt;
+    @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne

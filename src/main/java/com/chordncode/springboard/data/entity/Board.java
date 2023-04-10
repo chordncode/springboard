@@ -42,23 +42,25 @@ public class Board {
     generator = "SEQ_BOARD")
     private Long boardSn;
 
-    @Column(nullable = false, length = 300)
+    @Column(nullable = false, name="board_title", length = 300)
     private String boardTitle;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, name="board_content")
     private String boardContent;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, name="board_writer", length = 50)
     private String boardWriter;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="board_hit")
     private Long boardHit;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="board_pw")
     private String boardPw;
 
+    @Column(name="created_at")
     private LocalDateTime createdAt;
+    @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

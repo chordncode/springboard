@@ -39,6 +39,15 @@ public class CommentController {
         }
     }
 
+    @PostMapping("/{targetCommentSn}")
+    public ResponseEntity<?> insertCommentToComment(@PathVariable Long boardSn, @PathVariable Long targetCommentSn, @RequestBody CommentDto CommentDto){
+        try {
+            return ResponseEntity.ok().body(commentService.insertCommentToComment(boardSn, targetCommentSn, CommentDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PutMapping("/{commentSn}")
     public ResponseEntity<?> updateComment(@PathVariable Long boardSn, @PathVariable Long commentSn, @RequestBody CommentDto commentDto){
         try{

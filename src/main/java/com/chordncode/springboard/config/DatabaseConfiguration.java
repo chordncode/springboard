@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import lombok.Data;
-
-@Data
 @Configuration
 @PropertySource(value="file:${user.home}/Desktop/dev/application.properties", ignoreResourceNotFound=true)
 public class DatabaseConfiguration {

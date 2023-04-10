@@ -46,6 +46,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public CommentDto insertCommentToComment(Long boardSn, Long targetCommentSn, CommentDto commentDto) throws Exception {
+        Long commentSn = commentRepository.findMaxCommentSnByBoardSn(boardSn) + 1;
+        Comment comment = Comment.builder()
+                .boardSn(boardSn)
+                .commentSn(commentSn)
+                .commentContent(commentDto.getCommentContent())
+                .commentWriter(commentDto.getCommentWriter())
+                .commentPw(commentDto.getCommentPw())
+                .targetCommentSn(targetCommentSn)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return new CommentDto(commentRepository.save(comment));
+    }
+
+    @Override
     public CommentDto updateComment(Long boardSn, Long commentSn, CommentDto commentDto) throws ResponseStatusException {
         Comment selectedComment = commentRepository.findByBoardSnAndCommentSn(boardSn, commentSn).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."));
         if(!selectedComment.getCommentPw().equals(commentDto.getCommentPw())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다.");

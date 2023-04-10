@@ -25,6 +25,7 @@ public class CommentDto {
     private String commentContent;
     private String commentWriter;
     private String commentPw;
+    private Long targetCommentSn;
     
     private String createdAt;
     private String updatedAt;
@@ -35,6 +36,8 @@ public class CommentDto {
         this.commentContent = comment.getCommentContent();
         this.commentWriter = comment.getCommentWriter();
         this.commentPw = comment.getCommentPw();
+        this.targetCommentSn = comment.getTargetCommentSn();
+        
         if(comment.getCreatedAt()!= null){
             this.createdAt = comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
